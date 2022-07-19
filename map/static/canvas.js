@@ -31,7 +31,7 @@ let is_dragging = false;
 let startX;
 let startY;
 
-// shapes.push({ x: canvas.width / 2, y: canvas.height / 2, width: 50, height: 50, color: 'white', border: '2px solid green' });
+shapes.push({ x: canvas.width / 2, y: canvas.height / 2, width: 50, height: 50, color: 'white' });
 
 let is_mouse_in_shape = function (x, y, shape) {
     let shape_left = shape.x;
