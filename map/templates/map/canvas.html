@@ -1,0 +1,22 @@
+{% load static %}
+
+<canvas id="canvas"></canvas>
+<canvas id="grid"></canvas>
+
+<div id="room_controls">
+    <button class="control filled_control add_room"><i class="fa-solid fa-plus"></i></button>
+    <button class="control outlined_control delete_room"><i class="fa-solid fa-trash-can"></i></button>
+    <button class="control outlined_control edit_room"><i class="fa-solid fa-pencil"></i></button>
+    <button class="control outlined_control" id="debug"><i class="fa-solid fa-bug"></i></button>
+</div>
+
+<div class="hidden" id="debug_section">
+    <p id="debug_label">Debug data</p>
+    <div id="debug_box">
+        <div id="coords_label">x: 0 y: 0</div>
+    </div>
+</div>
+
+<script src="{% static 'canvas.js' %}"></script>
+<script src="{% static 'grid.js' %}"></script>
+<script src="{% static 'controls.js' %}"></script>

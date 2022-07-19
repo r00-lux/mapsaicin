@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@400;700&display=swap');
+
+#canvas {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    z-index: 750;
+}
+
+#grid {
+    height: 100%;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: -999;
+}
+
+#debug_section {
+    bottom: 250px;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    left: 75px;
+    position: fixed;
+    width: 200px;
+    z-index: 999;
+}
+
+#debug_box {
+    border: 1px solid white;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+#debug_label {
+    font-size: .75em;
+    margin: 0 0 10px 10px;
+    text-transform: uppercase;
+}
+
+#coords_label {
+    bottom: 10px;
+    color: #fff;
+    font-family: "Roboto", sans-serif;
+    font-size: 1em;
+    font-weight: 400;
+    left: 10px;
+    /* position: fixed; */
+    /* z-index: 999; */
+}
+
+@keyframes popInAnimation {
+    0% {
+        scale: 0;
+    }
+
+    50% {
+        scale: 1.1;
+    }
+
+    100% {
+        scale: 1;
+    }
+}
+
+#room_controls {
+    bottom: 50px;
+    height: 200px;
+    left: 30%;
+    position: fixed;
+    width: 300px;
+}
+
+.control {
+    animation: popInAnimation ease-in .5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    cursor: pointer;
+    font-size: 1em;
+    padding: 0;
+    position: fixed;
+    transition: all 0.3s ease 0s;
+}
+
+.control:hover {
+    transform: scale(1.1);
+}
+
+.add_room {
+    border-radius: 75px;
+    bottom: 75px;
+    font-size: 1.5em;
+    height: 75px;
+    left: 75px;
+    width: 75px;
+}
+
+.edit_room {
+    border-radius: 50px;
+    bottom: 160px;
+    height: 50px;
+    left: 75px;
+    width: 50px;
+}
+
+.delete_room {
+    border-radius: 50px;
+    bottom: 75px;
+    height: 50px;
+    left: 160px;
+    width: 50px;
+}
+
+.delete_room:hover {
+    color: red;
+    border-color: red;
+    scale: 1.1;
+}
+
+#debug {
+    border-radius: 50px;
+    bottom: 145px;
+    height: 35px;
+    left: 145px;
+    width: 35px;
+}
+
+.filled_control {
+    background-color: #fff;
+    border: none;
+    color: black;
+}
+
+.outlined_control {
+    background-color: transparent;
+    border: 2px solid white;
+    color: white;
+}
+
+.hidden {
+    display: none;
+    transition: all 0.3s ease 0s;
+}
