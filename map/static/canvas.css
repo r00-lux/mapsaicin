@@ -1,10 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@400;700&display=swap');
 
 #canvas {
-    height: 100%;
     margin: 0;
     padding: 0;
-    width: 100%;
+    /* touch-action: none; */
     z-index: 750;
 }
 
@@ -15,6 +14,7 @@
     padding: 0;
     position: fixed;
     top: 0;
+    /* touch-action: none; */
     width: 100%;
     z-index: -999;
 }
@@ -99,11 +99,8 @@
 }
 
 .edit_room {
-    border-radius: 50px;
     bottom: 160px;
-    height: 50px;
     left: 75px;
-    width: 50px;
 }
 
 .delete_room {
@@ -121,11 +118,8 @@
 }
 
 #debug {
-    border-radius: 50px;
     bottom: 145px;
-    height: 35px;
     left: 145px;
-    width: 35px;
 }
 
 .filled_control {
@@ -140,7 +134,48 @@
     color: white;
 }
 
+.medium_control {
+    border-radius: 50px;
+    height: 50px;
+    width: 50px;
+}
+
+.small_control {
+    border-radius: 50px;
+    height: 35px;
+    width: 35px;
+}
+
 .hidden {
     display: none;
     transition: all 0.3s ease 0s;
+}
+
+#view {
+    border-radius: 50px;
+    bottom: 220px;
+    height: 50px;
+    left: 75px;
+    width: 50px;
+}
+
+/* #view:hover {
+    background-color: #fff;
+    border: none;
+    color: black;
+} */
+
+#zoom_in {
+    bottom: 227px;
+    left: 135px;
+}
+
+#zoom_out {
+    bottom: 227px;
+    left: 180px;
+}
+
+#reset_zoom {
+    bottom: 227px;
+    left: 225px;
 }

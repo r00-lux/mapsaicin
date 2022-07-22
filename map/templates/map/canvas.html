@@ -1,13 +1,18 @@
 {% load static %}
 
-<canvas id="canvas"></canvas>
-<canvas id="grid"></canvas>
+<canvas id="draw_canvas"></canvas>
+{% comment %} <canvas id="grid"></canvas> {% endcomment %}
 
 <div id="room_controls">
     <button class="control filled_control add_room"><i class="fa-solid fa-plus"></i></button>
     <button class="control outlined_control delete_room"><i class="fa-solid fa-trash-can"></i></button>
-    <button class="control outlined_control edit_room"><i class="fa-solid fa-pencil"></i></button>
-    <button class="control outlined_control" id="debug"><i class="fa-solid fa-bug"></i></button>
+    <button class="control outlined_control edit_room medium_control"><i class="fa-solid fa-pencil"></i></button>
+    <button class="control outlined_control small_control" id="debug"><i class="fa-solid fa-bug"></i></button>
+
+    <button class="control outlined_control medium_control" id="view"><i class="fa-solid fa-eye"></i></button>
+    <button class="control outlined_control small_control hidden" id="zoom_in"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+    <button class="control outlined_control small_control hidden" id="zoom_out"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+    <button class="control outlined_control small_control hidden" id="reset_zoom"><i class="fa-solid fa-arrow-rotate-left"></i></button>
 </div>
 
 <div class="hidden" id="debug_section">
@@ -18,5 +23,5 @@
 </div>
 
 <script src="{% static 'canvas.js' %}"></script>
-<script src="{% static 'grid.js' %}"></script>
+{% comment %} <script src="{% static 'grid.js' %}"></script> {% endcomment %}
 <script src="{% static 'controls.js' %}"></script>

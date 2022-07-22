@@ -17,7 +17,6 @@ let get_grid_offset = function () {
 }
 
 get_offset();
-grid.onscroll = function () { get_grid_offset() };
 
 let p = 0;
 let grid_step = 25;
@@ -38,3 +37,5 @@ let drawGrid = function () {
 }
 
 drawGrid();
+
+grid.onscroll = function () { get_grid_offset(); drawGrid(); };
