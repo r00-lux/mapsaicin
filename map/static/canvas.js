@@ -41,30 +41,31 @@ function trueWidth() {
     return canvas.clientWidth / scale;
 }
 
-let grid_step = 100;
+let default_grid_step = 100;
 let drawGrid = function () {
     let grid_lines = [];
 
-    for (var x = 0 + offsetX; x <= canvas.width; x += grid_step) {
+    let grid_step = default_grid_step * scale;
+    // for (var x = 0 + offsetX; x <= canvas.width; x += grid_step) {
+    for (var x = offsetX % grid_step; x <= canvas.width; x += grid_step) {
         if (x <= 0) {
             continue
         }
 
         grid_lines.push(x);
 
-
         ctx.moveTo(x, 0);
         ctx.lineTo(x, canvas.height);
     }
 
-    console.log(offsetX, canvas.width, grid_lines);
+    // console.log(offsetX, canvas.width, grid_lines);
 
-    // for (var y = 0 + offsetY; y <= canvas.height; y += grid_step) {
-    //     ctx.moveTo(0, y);
-    //     ctx.lineTo(canvas.width, y);
-    // }
+    for (var y = offsetY % grid_step; y <= canvas.height; y += grid_step) {
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+    }
 
-    ctx.strokeStyle = "#222222";
+    ctx.strokeStyle = "#333333";
     ctx.stroke();
 }
 
@@ -81,7 +82,10 @@ function redrawCanvas() {
     drawGrid();
 
     ctx.fillStyle = "#fff";
-    ctx.fillRect(toScreenX(canvas.width / 2), toScreenY(canvas.height / 2), 50 * scale, 50 * scale);
+    ctx.fillRect(toScreenX(775), toScreenY(575), 50 * scale, 50 * scale);
+    ctx.fillRect(toScreenX(675), toScreenY(475), 50 * scale, 50 * scale);
+    ctx.fillRect(toScreenX(675), toScreenY(575), 50 * scale, 50 * scale);
+    ctx.fillRect(toScreenX(775), toScreenY(475), 50 * scale, 50 * scale);
 }
 
 redrawCanvas();
@@ -100,10 +104,10 @@ canvas.addEventListener('wheel', onMouseWheel, false);
 
 
 // Touch Event Handlers 
-canvas.addEventListener('touchstart', onTouchStart);
-canvas.addEventListener('touchend', onTouchEnd);
-canvas.addEventListener('touchcancel', onTouchEnd);
-canvas.addEventListener('touchmove', onTouchMove);
+// canvas.addEventListener('touchstart', onTouchStart);
+// canvas.addEventListener('touchend', onTouchEnd);
+// canvas.addEventListener('touchcancel', onTouchEnd);
+// canvas.addEventListener('touchmove', onTouchMove);
 
 // mouse functions
 let leftMouseDown = false;
@@ -157,127 +161,128 @@ function onMouseUp() {
     rightMouseDown = false;
 }
 function onMouseWheel(event) {
-    // console.log(event);
+    event.preventDefault();
 
-    // Distance scrolled vertically.
-    const deltaY = event.deltaY;
+    cursorX = event.deltaX;
+    cursorY = event.deltaY;
 
-    // Scale the scroll because fuck all.
-    const scaleAmount = -deltaY / 500;
-    scale = scale * (1 + scaleAmount);
-
-    // Zoome the page based on cursor location.
-    var distX = event.pageX / canvas.clientWidth;
-    var distY = event.pageY / canvas.clientHeight;
-
-    // Figure out how far to zoom.
-    const unitsZoomedX = trueWidth() * scaleAmount;
-    const unitsZoomedY = trueHeight() * scaleAmount;
-
-    const unitsAddLeft = unitsZoomedX * distX;
-    const unitsAddTop = unitsZoomedY * distY;
-
-    offsetX -= unitsAddLeft;
-    offsetY -= unitsAddTop;
+    offsetX -= cursorX * scale;
+    offsetY -= cursorY * scale;
 
     redrawCanvas();
+
+    prevCursorX = cursorX;
+    prevCursorY = cursorY;
+
+    // // Distance scrolled vertically.
+    // const deltaY = event.deltaY;
+
+    // // Scale the scroll because fuck all.
+    // const scaleAmount = -deltaY / 500;
+    // scale = scale * (1 + scaleAmount);
+
+    // // Zoome the page based on cursor location.
+    // var distX = event.pageX / canvas.clientWidth;
+    // var distY = event.pageY / canvas.clientHeight;
+
+    // // Figure out how far to zoom.
+    // const unitsZoomedX = trueWidth() * scaleAmount;
+    // const unitsZoomedY = trueHeight() * scaleAmount;
+
+    // const unitsAddLeft = unitsZoomedX * distX;
+    // const unitsAddTop = unitsZoomedY * distY;
+
+    // offsetX -= unitsAddLeft;
+    // offsetY -= unitsAddTop;
 }
-function drawLine(x0, y0, x1, y1) {
-    ctx.beginPath();
-    ctx.moveTo(x0, y0);
-    ctx.lineTo(x1, y1);
-    ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-}
 
-// touch functions
-const prevTouches = [null, null]; // up to 2 touches
-let singleTouch = false;
-let doubleTouch = false;
-function onTouchStart(event) {
-    if (event.touches.length == 1) {
-        singleTouch = true;
-        doubleTouch = false;
-    }
-    if (event.touches.length >= 2) {
-        singleTouch = false;
-        doubleTouch = true;
-    }
+// // touch functions
+// const prevTouches = [null, null]; // up to 2 touches
+// let singleTouch = false;
+// let doubleTouch = false;
+// function onTouchStart(event) {
+//     if (event.touches.length == 1) {
+//         singleTouch = true;
+//         doubleTouch = false;
+//     }
+//     if (event.touches.length >= 2) {
+//         singleTouch = false;
+//         doubleTouch = true;
+//     }
 
-    // store the last touches
-    prevTouches[0] = event.touches[0];
-    prevTouches[1] = event.touches[1];
+//     // store the last touches
+//     prevTouches[0] = event.touches[0];
+//     prevTouches[1] = event.touches[1];
 
-}
-function onTouchMove(event) {
-    event.preventDefault();
-    // get first touch coordinates
-    const touch0X = event.touches[0].pageX;
-    const touch0Y = event.touches[0].pageY;
-    const prevTouch0X = prevTouches[0].pageX;
-    const prevTouch0Y = prevTouches[0].pageY;
+// }
+// function onTouchMove(event) {
+//     event.preventDefault();
+//     // get first touch coordinates
+//     const touch0X = event.touches[0].pageX;
+//     const touch0Y = event.touches[0].pageY;
+//     const prevTouch0X = prevTouches[0].pageX;
+//     const prevTouch0Y = prevTouches[0].pageY;
 
-    // const scaledX = toTrueX(touch0X);
-    // const scaledY = toTrueY(touch0Y);
-    // const prevScaledX = toTrueX(prevTouch0X);
-    // const prevScaledY = toTrueY(prevTouch0Y);
+//     // const scaledX = toTrueX(touch0X);
+//     // const scaledY = toTrueY(touch0Y);
+//     // const prevScaledX = toTrueX(prevTouch0X);
+//     // const prevScaledY = toTrueY(prevTouch0Y);
 
-    if (singleTouch) {
-        console.log('Single touch');
-    }
+//     if (singleTouch) {
+//         console.log('Single touch');
+//     }
 
-    if (doubleTouch) {
-        // get second touch coordinates
-        const touch1X = event.touches[1].pageX;
-        const touch1Y = event.touches[1].pageY;
-        const prevTouch1X = prevTouches[1].pageX;
-        const prevTouch1Y = prevTouches[1].pageY;
+//     if (doubleTouch) {
+//         // get second touch coordinates
+//         const touch1X = event.touches[1].pageX;
+//         const touch1Y = event.touches[1].pageY;
+//         const prevTouch1X = prevTouches[1].pageX;
+//         const prevTouch1Y = prevTouches[1].pageY;
 
-        // get midpoints
-        const midX = (touch0X + touch1X) / 2;
-        const midY = (touch0Y + touch1Y) / 2;
-        const prevMidX = (prevTouch0X + prevTouch1X) / 2;
-        const prevMidY = (prevTouch0Y + prevTouch1Y) / 2;
+//         // get midpoints
+//         const midX = (touch0X + touch1X) / 2;
+//         const midY = (touch0Y + touch1Y) / 2;
+//         const prevMidX = (prevTouch0X + prevTouch1X) / 2;
+//         const prevMidY = (prevTouch0Y + prevTouch1Y) / 2;
 
-        // calculate the distances between the touches
-        const hypot = Math.sqrt(Math.pow((touch0X - touch1X), 2) + Math.pow((touch0Y - touch1Y), 2));
-        const prevHypot = Math.sqrt(Math.pow((prevTouch0X - prevTouch1X), 2) + Math.pow((prevTouch0Y - prevTouch1Y), 2));
+//         // calculate the distances between the touches
+//         const hypot = Math.sqrt(Math.pow((touch0X - touch1X), 2) + Math.pow((touch0Y - touch1Y), 2));
+//         const prevHypot = Math.sqrt(Math.pow((prevTouch0X - prevTouch1X), 2) + Math.pow((prevTouch0Y - prevTouch1Y), 2));
 
-        // calculate the screen scale change
-        var zoomAmount = hypot / prevHypot;
-        scale = scale * zoomAmount;
-        const scaleAmount = 1 - zoomAmount;
+//         // calculate the screen scale change
+//         var zoomAmount = hypot / prevHypot;
+//         scale = scale * zoomAmount;
+//         const scaleAmount = 1 - zoomAmount;
 
-        // calculate how many pixels the midpoints have moved in the x and y direction
-        const panX = midX - prevMidX;
-        const panY = midY - prevMidY;
-        // scale this movement based on the zoom level
-        offsetX += (panX / scale);
-        offsetY += (panY / scale);
+//         // calculate how many pixels the midpoints have moved in the x and y direction
+//         const panX = midX - prevMidX;
+//         const panY = midY - prevMidY;
+//         // scale this movement based on the zoom level
+//         offsetX += (panX / scale);
+//         offsetY += (panY / scale);
 
-        // Get the relative position of the middle of the zoom.
-        // 0, 0 would be top left. 
-        // 0, 1 would be top right etc.
-        var zoomRatioX = midX / canvas.clientWidth;
-        var zoomRatioY = midY / canvas.clientHeight;
+//         // Get the relative position of the middle of the zoom.
+//         // 0, 0 would be top left. 
+//         // 0, 1 would be top right etc.
+//         var zoomRatioX = midX / canvas.clientWidth;
+//         var zoomRatioY = midY / canvas.clientHeight;
 
-        // calculate the amounts zoomed from each edge of the screen
-        const unitsZoomedX = trueWidth() * scaleAmount;
-        const unitsZoomedY = trueHeight() * scaleAmount;
+//         // calculate the amounts zoomed from each edge of the screen
+//         const unitsZoomedX = trueWidth() * scaleAmount;
+//         const unitsZoomedY = trueHeight() * scaleAmount;
 
-        const unitsAddLeft = unitsZoomedX * zoomRatioX;
-        const unitsAddTop = unitsZoomedY * zoomRatioY;
+//         const unitsAddLeft = unitsZoomedX * zoomRatioX;
+//         const unitsAddTop = unitsZoomedY * zoomRatioY;
 
-        offsetX += unitsAddLeft;
-        offsetY += unitsAddTop;
+//         offsetX += unitsAddLeft;
+//         offsetY += unitsAddTop;
 
-        redrawCanvas();
-    }
-    prevTouches[0] = event.touches[0];
-    prevTouches[1] = event.touches[1];
-}
-function onTouchEnd(event) {
-    singleTouch = false;
-    doubleTouch = false;
-}
+//         redrawCanvas();
+//     }
+//     prevTouches[0] = event.touches[0];
+//     prevTouches[1] = event.touches[1];
+// }
+// function onTouchEnd(event) {
+//     singleTouch = false;
+//     doubleTouch = false;
+// }
