@@ -41,32 +41,47 @@ function trueWidth() {
     return canvas.clientWidth / scale;
 }
 
-let default_grid_step = 100;
 let drawGrid = function () {
-    let grid_lines = [];
-
-    let grid_step = default_grid_step * scale;
-    // for (var x = 0 + offsetX; x <= canvas.width; x += grid_step) {
-    for (var x = offsetX % grid_step; x <= canvas.width; x += grid_step) {
-        if (x <= 0) {
+    let step = 50;
+    for (var x = (offsetX % step) * scale; x <= canvas.width; x += step * scale) {
+        if (x < 0) {
             continue
-        }
-
-        grid_lines.push(x);
+        };
 
         ctx.moveTo(x, 0);
         ctx.lineTo(x, canvas.height);
     }
 
-    // console.log(offsetX, canvas.width, grid_lines);
+    for (var y = (offsetY % step) * scale; y <= canvas.height; y += step * scale) {
+        if (y < 0) {
+            continue
+        };
 
-    for (var y = offsetY % grid_step; y <= canvas.height; y += grid_step) {
         ctx.moveTo(0, y);
         ctx.lineTo(canvas.width, y);
     }
 
-    ctx.strokeStyle = "#333333";
+    ctx.strokeStyle = "#222222";
     ctx.stroke();
+}
+
+
+let tile1 = { x: 650, y: 500 };
+let tile2 = { x: 650, y: 435 };
+let tile3 = { x: 650, y: 370 };
+let tile4 = { x: 650, y: 305 };
+let tile5 = { x: 715, y: 305 };
+let tile6 = { x: 715, y: 240 };
+let tile7 = { x: 585, y: 500 };
+let tiles = [tile1, tile2, tile3, tile4, tile5, tile6, tile7];
+
+function drawTiles() {
+    let tile_width = 50 * scale;
+    for (i = 0; i < tiles.length; i++) {
+        let tile = tiles[i]
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(toScreenX(tile.x), toScreenY(tile.y), tile_width, tile_width);
+    }
 }
 
 // Draw canvas.
@@ -81,11 +96,13 @@ function redrawCanvas() {
 
     drawGrid();
 
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(toScreenX(775), toScreenY(575), 50 * scale, 50 * scale);
-    ctx.fillRect(toScreenX(675), toScreenY(475), 50 * scale, 50 * scale);
-    ctx.fillRect(toScreenX(675), toScreenY(575), 50 * scale, 50 * scale);
-    ctx.fillRect(toScreenX(775), toScreenY(475), 50 * scale, 50 * scale);
+    drawTiles();
+
+    // ctx.fillStyle = "#fff";
+    // ctx.fillRect(toScreenX(775), toScreenY(575), 50 * scale, 50 * scale);
+    // ctx.fillRect(toScreenX(675), toScreenY(475), 50 * scale, 50 * scale);
+    // ctx.fillRect(toScreenX(675), toScreenY(575), 50 * scale, 50 * scale);
+    // ctx.fillRect(toScreenX(775), toScreenY(475), 50 * scale, 50 * scale);
 }
 
 redrawCanvas();
@@ -96,83 +113,117 @@ window.addEventListener("resize", (event) => {
 });
 
 // Mouse Event Handlers
-canvas.addEventListener('mousedown', onMouseDown);
-canvas.addEventListener('mouseup', onMouseUp, false);
-canvas.addEventListener('mouseout', onMouseUp, false);
-canvas.addEventListener('mousemove', onMouseMove, false);
 canvas.addEventListener('wheel', onMouseWheel, false);
-
-
-// Touch Event Handlers 
-// canvas.addEventListener('touchstart', onTouchStart);
-// canvas.addEventListener('touchend', onTouchEnd);
-// canvas.addEventListener('touchcancel', onTouchEnd);
-// canvas.addEventListener('touchmove', onTouchMove);
 
 // mouse functions
 let leftMouseDown = false;
 let rightMouseDown = false;
-function onMouseDown(event) {
+// function onMouseDown(event) {
+//     console.log(event);
 
-    // detect left clicks
-    if (event.button == 0) {
-        leftMouseDown = true;
-        rightMouseDown = false;
-    }
-    // detect right clicks
-    if (event.button == 2) {
-        rightMouseDown = true;
-        leftMouseDown = false;
-    }
+//     // detect left clicks
+//     if (event.button == 0) {
+//         leftMouseDown = true;
+//         rightMouseDown = false;
+//     }
+//     // detect right clicks
+//     if (event.button == 2) {
+//         rightMouseDown = true;
+//         leftMouseDown = false;
+//     }
 
-    // update the cursor coordinates
-    cursorX = event.pageX;
-    cursorY = event.pageY;
-    prevCursorX = event.pageX;
-    prevCursorY = event.pageY;
-}
-function onMouseMove(event) {
-    // get mouse position
-    cursorX = event.pageX;
-    cursorY = event.pageY;
-    // const scaledX = toTrueX(cursorX);
-    // const scaledY = toTrueY(cursorY);
-    // const prevScaledX = toTrueX(prevCursorX);
-    // const prevScaledY = toTrueY(prevCursorY);
+//     // update the cursor coordinates
+//     cursorX = event.pageX;
+//     cursorY = event.pageY;
+//     prevCursorX = event.pageX;
+//     prevCursorY = event.pageY;
+// }
+// function onMouseMove(event) {
+//     // get mouse position
+//     cursorX = event.pageX;
+//     cursorY = event.pageY;
+//     // const scaledX = toTrueX(cursorX);
+//     // const scaledY = toTrueY(cursorY);
+//     // const prevScaledX = toTrueX(prevCursorX);
+//     // const prevScaledY = toTrueY(prevCursorY);
 
-    if (leftMouseDown) {
+//     if (leftMouseDown) {
 
-        // move the screen
-        offsetX += (cursorX - prevCursorX) / scale;
-        offsetY += (cursorY - prevCursorY) / scale;
-        redrawCanvas();
-    }
-    // if (rightMouseDown) {
-    //     // move the screen
-    //     offsetX += (cursorX - prevCursorX) / scale;
-    //     offsetY += (cursorY - prevCursorY) / scale;
-    //     redrawCanvas();
-    // }
-    prevCursorX = cursorX;
-    prevCursorY = cursorY;
-}
-function onMouseUp() {
-    leftMouseDown = false;
-    rightMouseDown = false;
-}
+//         // move the screen
+//         offsetX += (cursorX - prevCursorX) / scale;
+//         offsetY += (cursorY - prevCursorY) / scale;
+//         redrawCanvas();
+//     }
+//     // if (rightMouseDown) {
+//     //     // move the screen
+//     //     offsetX += (cursorX - prevCursorX) / scale;
+//     //     offsetY += (cursorY - prevCursorY) / scale;
+//     //     redrawCanvas();
+//     // }
+//     prevCursorX = cursorX;
+//     prevCursorY = cursorY;
+// }
+// function onMouseUp() {
+//     leftMouseDown = false;
+//     rightMouseDown = false;
+// }
+
+
 function onMouseWheel(event) {
+    const max_scale = 2;
+    const min_scale = .1;
+    // console.log(event);
     event.preventDefault();
 
-    cursorX = event.deltaX;
-    cursorY = event.deltaY;
+    if (event.ctrlKey) {
+        // scale -= event.deltaY / 100;
+        // // offsetX -= cursorX;
+        // // offsetY -= cursorY;
 
-    offsetX -= cursorX * scale;
-    offsetY -= cursorY * scale;
+        // redrawCanvas();
 
-    redrawCanvas();
+        // // Scale the scroll because fuck all.
+        const scaleAmount = -event.deltaY / 500;
+        scale = scale * (1 + scaleAmount);
 
-    prevCursorX = cursorX;
-    prevCursorY = cursorY;
+        // Limit scale.
+        if (scale >= max_scale) {
+            scale = max_scale;
+            return;
+        } else if (scale <= min_scale) {
+            scale = min_scale;
+            return;
+        }
+
+        // Zoome the page based on cursor location.
+        var distX = event.pageX / canvas.clientWidth;
+        var distY = event.pageY / canvas.clientHeight;
+
+        // Figure out how far to zoom.
+        const unitsZoomedX = trueWidth() * scaleAmount;
+        const unitsZoomedY = trueHeight() * scaleAmount;
+
+        const unitsAddLeft = unitsZoomedX * distX;
+        const unitsAddTop = unitsZoomedY * distY;
+
+        offsetX -= unitsAddLeft;
+        offsetY -= unitsAddTop;
+
+        redrawCanvas();
+    } else {
+        cursorX = event.deltaX;
+        cursorY = event.deltaY;
+
+        // offsetX -= cursorX * scale;
+        // offsetY -= cursorY * scale;
+        offsetX -= cursorX;
+        offsetY -= cursorY;
+
+        redrawCanvas();
+
+        prevCursorX = cursorX;
+        prevCursorY = cursorY;
+    }
 
     // // Distance scrolled vertically.
     // const deltaY = event.deltaY;
